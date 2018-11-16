@@ -1,0 +1,33 @@
+apply plugin: 'groovy'
+apply plugin: 'maven'
+
+group 'com.vikde'
+version '1.0.0'
+
+repositories {
+    maven { url "http://maven.aliyun.com/nexus/content/groups/public/" }
+    maven { url "http://clojars.org/repo/" }
+    mavenCentral()
+}
+
+dependencies {
+    compile gradleApi()
+    compile 'org.codehaus.groovy:groovy-all:2.4.12'
+}
+
+//上传到nexus
+uploadArchives {
+    repositories {
+        mavenDeployer {
+            repository(url: "http://127.0.0.1:8081/nexus/content/repositories/releases/") {
+                authentication(userName: "", password: "")
+            }
+            pom.project {
+                packaging jar
+            }
+            pom.version = project.version
+            pom.artifactId = project.name
+            pom.groupId = project.group
+        }
+    }
+}
